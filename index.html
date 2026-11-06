@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bài tập Liên minh châu Âu (EU)</title>
+<style>
+  :root {
+    --primary: #1a365d;
+    --accent: #2b6cb0;
+    --correct: #276749;
+    --wrong: #c53030;
+    --bg: #f7fafc;
+    --card: #ffffff;
+    --border: #e2e8f0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #edf2f7 0%, #e2e8f0 100%);
+    color: #2d3748;
+    line-height: 1.6;
+    padding: 20px;
+    min-height: 100vh;
+  }
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  header {
+    background: var(--primary);
+    color: white;
+    padding: 24px 28px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    text-align: center;
+  }
+  header h1 {
+    font-size: 1.7rem;
+    margin-bottom: 6px;
+  }
+  header p {
+    opacity: 0.9;
+    font-size: 0.95rem;
+  }
+  .toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 24px;
+    justify-content: center;
+  }
+  .btn {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
+  .btn:active { transform: translateY(0); }
+  .btn-primary { background: var(--accent); color: white; }
+  .btn-secondary { background: #4a5568; color: white; }
+  .btn-success { background: var(--correct); color: white; }
+  .btn-warning { background: #d69e2e; color: white; }
+  .btn-outline {
+    background: white;
+    border: 2px solid var(--accent);
+    color: var(--accent);
+  }
+  .section {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border: 1px solid var(--border);
+  }
+  .section-title {
+    font-size: 1.25rem;
+    color: var(--primary);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--accent);
+    font-weight: 700;
+  }
+  .subsection-title {
+    font-size: 1.05rem;
+    color: #2c5282;
+    margin: 18px 0 12px;
+    font-weight: 600;
+  }
+  .question {
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-bottom: 14px;
+    transition: box-shadow 0.2s;
+  }
+  .question:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+  .q-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .q-number {
+    background: var(--accent);
+    color: white;
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 3px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+  .q-text {
+    font-weight: 500;
+    flex: 1;
+  }
+  .options {
+    list-style: none;
+    margin-top: 10px;
+  }
+  .options li {
+    padding: 8px 12px;
+    margin: 4px 0;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.15s;
+    border: 1px solid transparent;
+  }
+  .options li:hover { background: #edf2f7; }
+  .options li.selected { background: #bee3f8; border-color: #3182ce; }
+  .options li.correct-answer {
+    background: #c6f6d5;
+    border-color: #38a169;
+    font-weight: 600;
+  }
+  .options li.wrong-selected {
+    background: #fed7d7;
+    border-color: #e53e3e;
+  }
+  .tf-item {
+    padding: 8px 12px;
+    margin: 4px 0;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: white;
+  }
+  .tf-item.correct { border-left: 4px solid #38a169; }
+  .tf-item.wrong { border-left: 4px solid #e53e3e; }
+  .answer-box {
+    margin-top: 10px;
+    padding: 10px 14px;
+    background: #ebf8ff;
+    border-radius: 6px;
+    border-left: 4px solid var(--accent);
+    display: none;
+    font-size: 0.95rem;
+  }
+  .answer-box.show { display: block; }
+  .short-answer input {
+    width: 100%;
+    max-width: 220px;
+    padding: 8px 12px;
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    font-size: 1rem;
+    margin-top: 8px;
+  }
+  .short-answer input:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 0.9rem;
+  }
+  table th, table td {
+    border: 1px solid #cbd5e0;
+    padding: 8px 10px;
+    text-align: center;
+  }
+  table th {
+    background: #edf2f7;
+    font-weight: 600;
+  }
+  .note {
+    font-size: 0.85rem;
+    color: #718096;
+    margin-top: 6px;
+  }
+  .score-panel {
+    position: sticky;
+    top: 10px;
+    background: white;
+    border: 2px solid var(--accent);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    display: none;
+  }
+  .score-panel.show { display: block; }
+  .score-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--primary);
+  }
+  footer {
+    text-align: center;
+    margin-top: 30px;
+    padding: 16px;
+    color: #718096;
+    font-size: 0.9rem;
+  }
+  @media (max-width: 600px) {
+    header h1 { font-size: 1.35rem; }
+    .btn { padding: 8px 14px; font-size: 0.85rem; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>BÀI 9. LIÊN MINH CHÂU ÂU (EU)</h1>
+    <p>Bài tập trắc nghiệm &amp; trả lời ngắn – Địa lí 11</p>
+  </header>
+
+  <div class="toolbar">
+    <button class="btn btn-primary" onclick="shuffleQuestions()">🔀 Đảo thứ tự câu</button>
+    <button class="btn btn-secondary" onclick="shuffleOptions()">🔀 Đảo đáp án</button>
+    <button class="btn btn-outline" onclick="resetOrder()">↺ Khôi phục thứ tự gốc</button>
+    <button class="btn btn-success" onclick="showAllAnswers()">✓ Hiện đáp án</button>
+    <button class="btn btn-warning" onclick="hideAllAnswers()">Ẩn đáp án</button>
+    <button class="btn btn-primary" onclick="checkAnswers()">Kiểm tra</button>
+  </div>
+
+  <div class="score-panel" id="scorePanel">
+    <div>Kết quả: <span class="score-value" id="scoreValue">0</span> / <span id="totalQ">0</span></div>
+  </div>
+
+  <div id="questionsContainer">
+    <!-- ========== I. TRẮC NGHIỆM NHIỀU LỰA CHỌN ========== -->
+    <div class="section" data-section="1">
+      <div class="section-title">I. TRẮC NGHIỆM NHIỀU PHƯƠNG ÁN – NHIỀU LỰA CHỌN</div>
+
+      <div class="subsection-title">1. NHẬN BIẾT</div>
+
+      <!-- Câu 1 -->
+      <div class="question" data-id="nb1" data-type="mc" data-answer="B">
+        <div class="q-header">
+          <span class="q-number">Câu 1</span>
+          <div class="q-text">Diện tích của EU lớn hơn</div>
+        </div>
+        <ul class="options">
+          <li data-opt="A">A. Hoa Kỳ.</li>
+          <li data-opt="B">B. Nhật Bản.</li>
+          <li data-opt="C">C. Trung Quốc.</li>
+          <li data-opt="D">D. Liên Bang Nga.</li>
+        </ul>
+        <div class="answer-box">Đáp án: <strong>B</strong></div>
+      </div>
+
+      <!-- Câu 2 -->
+      <div class="question" data-id="nb2" data-type="mc" data-answer="A">
+        <div class="q-header">
+          <span class="q-number">Câu 2</span>
+          <div class="q-text">Dân số của EU nhỏ hơn</div>
+        </div>
+        <ul class="options">
+          <li data-opt="A">A. Trung Quốc.</li>
+          <li data-opt="B">B. Nhật Bản.</li>
+          <li data-opt="C">C. Liên Bang Nga.</li>
+          <li data-opt="D">D. Hoa Kỳ.</li>
+        </ul>
+        <div class="answer-box">Đáp án: <strong>A</strong></div>
+      </div>
+
+      <!-- Câu 3 -->
+      <div class="question" data-id="nb3" data-type="mc" data-answer="C">
+        <div class="q-header">
+          <span class="q-number">Câu 3</span>
+          <div class="q-text">Tỉ trọng của EU trong cơ cấu kinh tế thế giới nhỏ hơn</div>
+        </div>
+        <ul class="options">
+          <li data-opt="A">A. Nhật Bản.</li>
+          <li data-opt="B">B. Trung Quốc.</li>
+          <li data-opt="C">C. Hoa Kỳ.</li>
+          <li data-opt="D">D. Liên Bang Nga.</li>
+        </ul>
+        <div class="answer-box">Đáp án: <strong>C</strong></div>
+      </div>
+
+      <!-- Câu 4 -->
+      <div class="question" data-id="nb4" data-type="mc" data-answer="D">
+        <div class="q-header">
+          <span class="q-number">Câu 4</span>
+          <div class="q-text">Tên gọi Liên minh châu Âu (EU) có từ năm nào sau đây?</div>
+        </div>
+        <ul class="options">
+          <li data-opt="A">A. 1963.</li>
+          <li data-opt="B">B. 1973.</li>
+          <li data-opt="C">C. 1983.</li>
+          <li data-opt="D">D. 1993.</li>
+        </ul>
+        <div class="answer-box">Đáp án: <strong>D</strong></div>
+      </div>
+
+      <!-- Câu 5 -->
+      <div class="question" data-id="nb5" data-type="mc" data-answer="C">
+        <div class="q-header">
+          <span class="q-number">Câu 5</span>
+          <div class="q-text">Tổng số các nước thành viên của Liên minh châu Âu (EU) hiện nay (2020) là</div>
+        </div>
+        <ul class="options">
+          <li data-opt="A">A. 25.</li>
+          <li data-opt="B">B. 26.</li>
+          <li data-opt="C">C. 27.</li>
+          <li data-opt="D">D. 28.</li>
+        </ul>
+        <div class="answer-box">Đáp án: <strong>C</strong></div>
+      </div>
+
+      <!-- Câu 6 -->
+      <div class="question" data-id="nb6" data-type="mc" data-answer="D">
+        <div class="q-header">
+          <span class="q-number">Câu 6</span>
+          <div class="q-text">Vương quốc Anh chính thức rời Liên minh châu Âu (EU) vào năm nào sau đây?</div>
+        </div>
+        <ul class="options">
+          <li data-opt="A">A. 2005.</li>
+          <li data-opt="B">B. 2010.</li>
+          <li data-opt="C">C. 2015.</li>
+          <li data-opt="D">D. 2020.</li>
+        </ul>
+        <div class="answer-box">Đáp án: <strong>D</strong></div>
+      </div>
+
+      <!-- Câu 7 -->
+      <div class="question" data-id="nb7" data-type="mc" data-answer="D">
+        <div class="q-header">
+          <span class="q-number">Câu 7</span>
+          <div class="q-text">Phát biểu nào sau đây <strong>không đúng</strong> về đồng tiền chung châu Âu (đồng ơ-rô)?</div>
+        </div>
+        <ul class="options">
+          <li data-opt="A">A. Có vị trí cao trong giao dịch quốc tế.</li>
+          <li data-opt="B">B. Đồng tiền dự trữ chính thức quốc tế.</li>
+          <li data-opt="C">C. Tác động đến tiền tệ các nước khác.</li>
+          <li data-opt="D">D. Tất cả thành viên EU đã dùng chung.</li>
+        </ul>
+        <div class="answer-box">Đáp án: <strong>D</strong></div>
+      </div>
+
+      <!-- Câu 8 -->
+      <div class="question" data-id="nb8" data-type="mc" data-answer="C">
+        <div class="q-header">
+          <span class="q-number">Câu 8</span>
+          <div class="q-text">Liên minh châu Âu (EU) đứng đầu thế giới về tỉ trọng</div>
+        </div>
+        <ul class="options">
+          <li data-opt="A">A. viện trợ phát triển thế giới.</li>
+          <li data-opt="B">B. sản xuất ô tô trên thế giới.</li>
+          <li data-opt="C">C. xuất khẩu của thế giới.</li>
+          <li data-opt="D">D. tiêu thụ năng lượng thế giới.</li>
+        </ul>
+        <div class="answer-box">Đáp án: <strong>C</strong></div>
+      </div>
+
+      <!-- Câu 9 -->
+      <div class="question" data-id="nb9" data-type="mc" data-answer="B">
+        <div class="q-header">
+          <span class="q-number">Câu 9</span>
+          <div class="q-text">Các nước nào sau đây tham gia thành lập Cộng đồng Kinh tế châu Âu (năm 1957)?</div>
+        </div>
+        <ul class="options">
+          <li data-opt="A">A. Pháp, CHLB Đức, I-ta-li-a, Áo, Hà Lan, Lúc-xăm-bua.</li>
+          <li data-opt="B">B. Pháp, CHLB Đức, I-ta-li-a, Bỉ, Hà Lan, Lúc-xăm-bua.</li>
+          <li data-opt="C">C. Pháp, CHLB Đức, I-ta-li-a, Bỉ, Ba Lan, Lúc-xăm-bua.</li>
+          <li data-opt="D">D. Pháp, CHLB Đức, I-ta-li-a, Bỉ, Na Uy, Lúc-xăm-bua.</li>
+        </ul>
+        <div class="answer-box">Đáp án: <strong>B</strong></div>
+      </div>
+
+      <!-- Câu 10 -->
+      <div class="question" data-id="nb10" data-type="mc" data-answer="B">
+        <div class="q-header">
+          <span class="q-number">Câu 10</span>
+          <div class="q-text">Nước nào sau đây gia nhập Liên minh châu Âu (EU) năm 2013?</div>
+        </div>
+        <ul class="options">
+          <li data-opt="A">A. Hung-ga-ri.</li>
+          <li data-opt="B">B. Crôát-ti-a.</li>
+          <li data-opt="C">C. Ru-ma-ni.</li>
+          <li data-opt="D">D. Bun-ga-ri.</li>
+        </ul>
+        <div class="answer-box">Đáp án: <strong>B</strong></div>
+      </div>
+
+      <!-- Câu 11 -->
+      <div class="question" data-id="nb11" data-type="mc" data-answer="B">
+        <div class="q-header">
+          <span class="q-number">Câu 11</span>
+          <div class="q-text">Cộng đồng châu Âu được thành lập năm nào sau đây?</div>
+        </div>
+        <ul class="options">
+          <li data-opt="A">A. 1957.</li>
+          <li data-opt="B">B. 1967.</li>
+          <li data-opt="C">C. 1981.</li>
+          <li data-opt="D">D. 1993.</li>
+        </ul>
+        <div class="answer-box">Đáp án: <strong>B</strong></div>
+      </div>
+
+      <!-- Câu 12 -->
+      <div class="question" data-id="nb12" data-type="mc" data-answer="C">
+        <div class="q-header">
+          <span class="q-number">Câu 12</span>
+          <div class="q-text">Các nước gia nhập Liên minh châu Âu (EU) năm 2007 là</div>
+        </div>
+        <ul class="options">
+          <li data-opt="A">A. Ru-ma-ni, An-ba-ni.</li>
+          <li data-opt="B">B. An-ba-ni, Bun-ga-ri.</li>
+          <li data-opt="C">C. Bun-ga-ri, Ru-ma-ni.</li>
+          <li data-opt="D">D. Ru-ma-ni, I-ta-li-a.</li>
+        </ul>
+        <div class="answer-box">Đáp án: <strong>C</strong></div>
+      </div>
+
+      <div class="subsection-title">2. THÔNG HIỂU</div>
+
+      <!-- TH Câu 1 -->
+      <div class="question" data-id="th1" data-type="mc" data-answer="A">
+        <div class="q-header">
+          <span class="q-number">Câu 1</span>
+          <div class="q-text">Mục tiêu chủ yếu của Liên minh châu Âu (EU) là</div>
+        </div>
+        <ul class="options">
+          <li data-opt="A">A. xây dựng EU thành khu vực tự do và liên kết chặt chẽ.</li>
+          <li data-opt="B">B. ngăn chặn nguy cơ xung đột giữa các dân tộc, tôn giáo.</li>
+          <li data-opt="C">C. cùng nhau hạn chế các dòng nhập cư trái phép xảy ra.</li>
+          <li data-opt="D">D. bảo vệ an ninh, phòng chống nguy cơ biến đổi khí hậu.</li>
+        </ul>
+        <div class="answer-box">Đáp án: <strong>A</strong></div>
+      </div>
+
+      <!-- TH Câu 2 -->
+      <div class="question" data-id="th2" data-type="mc" data-answer="D">
+        <div class="q-header">
+          <span class="q-number">Câu 2</span>
+          <div class="q-text">Cơ quan đầu não đứng đầu EU hiện nay là</div>
+        </div>
+        <ul class="options">
+          <li data-opt="A">A. Các ủy ban chính phủ.</li>
+          <li data-opt="B">B. Hội đồng bộ trưởng.</li>
+          <li data-opt="C">C. Quốc hội Châu Âu.</li>
+          <li data-opt="D">D. Hội đồng Châu Âu.</li>
+        </ul>
+        <div class="answer-box">Đáp án: <strong>D</strong></div>
+      </div>
+
+      <!-- TH Câu 3 -->
+      <div class="question" data-id="th3" data-type="mc" data-answer="D">
+        <div class="q-header">
+          <span class="q-number">Câu 3</span>
+          <div class="q-text">Cơ quan đặt ra các định hướng chung ở Liên minh châu Âu (EU) là</div>
+        </div>
+        <ul class="options">
+          <li data-opt="A">A. Hội đồng bộ trưởng châu Âu.</li>
+          <li data-opt="B">B. Ủy ban châu Âu.</li>
+          <li data-opt="C">C. Nghị viện châu Âu.</li>
+          <li data-opt="D">D. Hội đồng châu Âu.</li>
+        </ul>
+        <div class="answer-box">Đáp án: <strong>D</strong></div>
+      </div>
+
+      <!-- TH Câu 4 -->
+      <div class="question" data-id="th4" data-type="mc" data-answer="C">
+        <div class="q-header">
+          <span class="q-number">Câu 4</span>
+          <div class="q-text">Cơ quan có nhiệm vụ lập pháp ở Liên minh châu Âu (EU) là</div>
+        </div>
+        <ul class="options">
+          <li data-opt="A">A. Hội đồng bộ trưởng EU.</li>
+          <li data-opt="B">B. Ủy ban châu Âu.</li>
+          <li data-opt="C">C. Nghị viện châu Âu.</li>
+          <li data-opt="D">D. Hội đồng châu Âu.</li>
+        </ul>
+        <div class="answer-box">Đáp án: <strong>C</strong></div>
+      </div>
+
+      <!-- TH Câu 5 -->
+      <div class="question" data-id="th5" data-type="mc" data-answer="D">
+        <div class="q-header">
+          <span class="q-number">Câu 5</span>
+          <div class="q-text">Lĩnh vực nào sau đây <strong>không</strong> đặt ra làm mục tiêu hợp tác chính trong Liên minh châu Âu (EU)?</div>
+        </div>
+        <ul class="options">
+          <li data-opt="A">A. Kinh tế.</li>
+          <li data-opt="B">B. Luật pháp.</li>
+          <li data-opt="C">C. Nội vụ.</li>
+          <li data-opt="D">D. Quân sự.</li>
+        </ul>
+        <div class="answer-box">Đáp án: <strong>D</strong></div>
+      </div>
+
+      <div class="subsection-title">3. VẬN DỤNG</div>
+
+      <!-- VD Câu 1 -->
+      <div class="question" data-id="vd1" data-type="mc" data-answer="D">
+        <div class="q-header">
+          <span class="q-number">Câu 1</span>
+          <div class="q-text">Ở Liên minh châu Âu (EU), sản phẩm mĩ phẩm A sản xuất tại Ba Lan được buôn bán trên thị trường của các nước thành viên mà không phải chịu thuế nhập khẩu nhưng phải tuân theo tiêu chuẩn chung của toàn EU là biểu hiện của</div>
+        </div>
+        <ul class="options">
+          <li data-opt="A">A. tự do di chuyển.</li>
+          <li data-opt="B">B. tự do lưu thông tiền vốn.</li>
+          <li data-opt="C">C. tự do lưu thông dịch vụ.</li>
+          <li data-opt="D">D. tự do lưu thông hàng hóa.</li>
+        </ul>
+        <div class="answer-box">Đáp án: <strong>D</strong></div>
+      </div>
+
+      <!-- VD Câu 2 -->
+      <div class="question" data-id="vd2" data-type="mc" data-answer="C">
+        <div class="q-header">
+          <span class="q-number">Câu 2</span>
+          <div class="q-text">Ở Liên minh châu Âu (EU), doanh nghiệp A của Hà Lan có thể tiếp cận nguồn vốn, thông tin, bán sản phẩm, tuyển nhân viên tại Áo như một doanh nghiệp của Áo là biểu hiện của</div>
+        </div>
+        <ul class="options">
+          <li data-opt="A">A. tự do di chuyển.</li>
+          <li data-opt="B">B. tự do lưu thông tiền vốn.</li>
+          <li data-opt="C">C. tự do lưu thông dịch vụ.</li>
+          <li data-opt="D">D. tự do lưu thông hàng hóa.</li>
+        </ul>
+        <div class="answer-box">Đáp án: <strong>C</strong></div>
+      </div>
+
+      <!-- VD Câu 3 -->
+      <div class="question" data-id="vd3" data-type="mc" data-answer="D">
+        <div class="q-header">
+          <span class="q-number">Câu 3</span>
+          <div class="q-text">Hoạt động nào sau đây <strong>không</strong> thể hiện sự hợp tác trong sản xuất và dịch vụ của Liên minh châu Âu (EU)?</div>
+        </div>
+        <ul class="options">
+          <li data-opt="A">A. Cùng hợp tác sản xuất máy bay E-bớt.</li>
+          <li data-opt="B">B. Đường hầm giao thông dưới biển Măng-sơ.</li>
+          <li data-opt="C">C. Sử dụng đồng tiền chung của EU.</li>
+          <li data-opt="D">D. Tự do đi lại, cư trú, lựa chọn nơi làm việc.</li>
+        </ul>
+        <div class="answer-box">Đáp án: <strong>D</strong></div>
+      </div>
+
+      <!-- VD Câu 4 -->
+      <div class="question" data-id="vd4" data-type="mc" data-answer="D">
+        <div class="q-header">
+          <span class="q-number">Câu 4</span>
+          <div class="q-text">Phát biểu nào sau đây <strong>không phải</strong> thể hiện hợp tác trong sản xuất và dịch vụ của Liên minh châu Âu (EU)?</div>
+        </div>
+        <ul class="options">
+          <li data-opt="A">A. Mạng lưới đường bộ, sắt, cảng biển và cảng sông nối liền các nước.</li>
+          <li data-opt="B">B. Vận tải đường sắt ở châu Âu đang được đồng bộ hóa giữa các nước.</li>
+          <li data-opt="C">C. Các nước ở EU hợp tác trong việc chế tạo được loại máy bay E-bớt.</li>
+          <li data-opt="D">D. EU có một mạng lưới pháp luật về các lĩnh vực bảo vệ môi trường.</li>
+        </ul>
+        <div class="answer-box">Đáp án: <strong>D</strong></div>
+      </div>
+
+      <!-- VD Câu 5 -->
+      <div class="question" data-id="vd5" data-type="mc" data-answer="A">
+        <div class="q-header">
+          <span class="q-number">Câu 5</span>
+          <div class="q-text">Phát biểu nào sau đây <strong>không đúng</strong> về Liên minh châu Âu (EU)?</div>
+        </div>
+        <ul class="options">
+          <li data-opt="A">A. Là một tổ chức liên kết quốc tế hoạt động rất hiệu quả.</li>
+          <li data-opt="B">B. Là tổ chức liên kết khu vực có thể chế hoạt động riêng.</li>
+          <li data-opt="C">C. Đã có thị trường chung với sự di chuyển tự do hàng hóa.</li>
+          <li data-opt="D">D. Đã có nhiều nước trong khu vực dùng đồng tiền chung.</li>
+        </ul>
+        <div class="answer-box">Đáp án: <strong>A</strong></div>
+      </div>
+
+      <!-- VD Câu 6 -->
+      <div class="question" data-id="vd6" data-type="mc" data-answer="C">
+        <div class="q-header">
+          <span class="q-number">Câu 6</span>
+          <div class="q-text">Cho bảng số liệu:<br>
+            <strong>DÂN SỐ EU QUA CÁC NĂM</strong> (Đơn vị: Triệu người)
+            <table>
+              <tr><th>Năm</th><th>2004</th><th>2007</th><th>2013</th><th>2021</th></tr>
+              <tr><td>Số dân</td><td>457,2</td><td>495,0</td><td>506,0</td><td>447,7</td></tr>
+            </table>
+            (Nguồn: Liên minh Châu Âu và Ngân hàng Thế giới, năm 2022)<br>
+            Theo bảng số liệu, để thể hiện dân số của EU giai đoạn 2004 – 2021, dạng biểu đồ nào sau đây là thích hợp nhất?
+          </div>
+        </div>
+        <ul class="options">
+          <li data-opt="A">A. Tròn.</li>
+          <li data-opt="B">B. Đường.</li>
+          <li data-opt="C">C. Cột.</li>
+          <li data-opt="D">D. Miền.</li>
+        </ul>
+        <div class="answer-box">Đáp án: <strong>C</strong></div>
+      </div>
+
+      <!-- VD Câu 7 -->
+      <div class="question" data-id="vd7" data-type="mc" data-answer="D">
+        <div class="q-header">
+          <span class="q-number">Câu 7</span>
+          <div class="q-text">Cho bảng số liệu:<br>
+            <strong>SỐ DÂN VÀ GDP CỦA EU, HOA KỲ VÀ NHẬT BẢN NĂM 2021</strong>
+            <table>
+              <tr><th>Chỉ số</th><th>EU</th><th>Hoa Kỳ</th><th>Nhật Bản</th></tr>
+              <tr><td>Số dân (triệu người)</td><td>447,7</td><td>331,8</td><td>126,6</td></tr>
+              <tr><td>GDP (tỉ USD)</td><td>17 177,4</td><td>23 315,1</td><td>4 940,9</td></tr>
+            </table>
+            (Nguồn: Ngân hàng Thế giới, năm 2022)<br>
+            Theo bảng số liệu, để thể hiện số dân và GDP của EU, Hoa Kỳ và Nhật Bản năm 2021, biểu đồ nào sau đây thích hợp nhất?
+          </div>
+        </div>
+        <ul class="options">
+          <li data-opt="A">A. Đường.</li>
+          <li data-opt="B">B. Tròn.</li>
+          <li data-opt="C">C. Miền.</li>
+          <li data-opt="D">D. Cột.</li>
+        </ul>
+        <div class="answer-box">Đáp án: <strong>D</strong></div>
+      </div>
+    </div>
+
+    <!-- ========== II. TRẮC NGHIỆM ĐÚNG SAI ========== -->
+    <div class="section" data-section="2">
+      <div class="section-title">II. TRẮC NGHIỆM ĐÚNG SAI</div>
+
+      <!-- DS Câu 1 -->
+      <div class="question" data-id="ds1" data-type="tf" data-correct="a,b" data-wrong="c,d">
+        <div class="q-header">
+          <span class="q-number">Câu 1</span>
+          <div class="q-text">Cho thông tin sau:<br>
+            <em>“Đồng Ơ-rô được chính thức đưa vào lưu hành năm 1999, đây là kết quả của sự nhất thể hoá EU. Việc đưa vào sử dụng đồng Ơ-rô có ý nghĩa quan trọng trong việc nâng cao sức cạnh tranh của thị trường Châu Âu, xoá bỏ những rủi ro khi chuyển đổi tiền tệ, tạo thuận lợi cho việc sản xuất, kinh doanh....”</em>
+          </div>
+        </div>
+        <div class="tf-list">
+          <div class="tf-item" data-key="a">a) Đồng Ơ-rô là một trong những đồng tiền có ảnh hưởng quan trọng đối với thế giới.</div>
+          <div class="tf-item" data-key="b">b) Đồng Ơ-rô giúp nâng cao sức cạnh tranh của thị trường Châu Âu.</div>
+          <div class="tf-item" data-key="c">c) Tất cả các thành viên của EU đều sử dụng đồng tiền chung Ơ-rô.</div>
+          <div class="tf-item" data-key="d">d) Sự ra đời của đồng Ơ-rô thúc đẩy sự phát triển kinh tế giữa các quốc gia đồng thời tăng sự đoàn kết hoà bình trong khu vực Châu Âu.</div>
+        </div>
+        <div class="answer-box">Đáp án: <strong>a, b đúng</strong>; c, d sai.</div>
+      </div>
+
+      <!-- DS Câu 2 -->
+      <div class="question" data-id="ds2" data-type="tf" data-correct="b,c,d" data-wrong="a">
+        <div class="q-header">
+          <span class="q-number">Câu 2</span>
+          <div class="q-text">Cho thông tin sau:<br>
+            <em>“Dòng người nhập cư vào Châu Âu không chỉ là cơ hội kinh tế mà còn là thách thức về văn hoá. Hội nhập thành công là một quá trình nhiều mặt, không chỉ liên quan đến sự hoà nhập của người nhập cư vào thị trường lao động mà còn cả sự hoà nhập văn hoá và cách sống của họ vào xã hội Châu Âu. Cơ cấu xã hội Châu Âu vẫn phải đối mặt với những khó khăn đáng kể trong việc hoà nhập người nhập cư. Cơ cấu xã hội của các nước Châu Âu liên tục bị thách thức bởi sự hình thành các cộng đồng riêng biệt bị tách rời hoàn toàn khỏi đời sống của người dân bản địa.”</em>
+          </div>
+        </div>
+        <div class="tf-list">
+          <div class="tf-item" data-key="a">a) Châu Âu có nhiều chính sách khuyến khích dân nhập cư tự do.</div>
+          <div class="tf-item" data-key="b">b) Châu Âu đang đối mặt với già hoá dân số và thiếu lao động.</div>
+          <div class="tf-item" data-key="c">c) Dân nhập cư vào châu Âu góp phần đa dạng hoá nền văn hoá châu Âu.</div>
+          <div class="tf-item" data-key="d">d) Sự phân biệt đối xử kỳ thị dân tộc vẫn tiếp tục là rào cản lớn đối với người nhập cư đến Châu Âu.</div>
+        </div>
+        <div class="answer-box">Đáp án: <strong>b, c, d đúng</strong>; a sai.</div>
+      </div>
+
+      <!-- DS Câu 3 -->
+      <div class="question" data-id="ds3" data-type="tf" data-correct="a,d" data-wrong="b,c">
+        <div class="q-header">
+          <span class="q-number">Câu 3</span>
+          <div class="q-text">Cho đoạn thông tin sau:<br>
+            <em>“EU là một tổ chức kinh tế khu vực có vị trí quan trọng trên thế giới. Mục tiêu của EU là thúc đẩy tự do lưu thông, tăng cường liên kết giữa các quốc gia thành viên về mọi mặt. Việc thúc đẩy thị trường chung châu Âu không chỉ mang lại lợi ích cho các doanh nghiệp mà còn góp phần vào sự phát triển bền vững và cân bằng của khu vực, từ đó tạo ra cơ hội mới cho sự phát triển kinh tế và xã hội của toàn bộ EU...”</em>
+          </div>
+        </div>
+        <div class="tf-list">
+          <div class="tf-item" data-key="a">a) Mục đích của thiết lập thị trường chung là tăng cường liên kết giữa các quốc gia thành viên về mọi mặt.</div>
+          <div class="tf-item" data-key="b">b) EU là trung tâm kinh tế đứng thứ 1 thế giới.</div>
+          <div class="tf-item" data-key="c">c) Mặt hàng nhập khẩu của EU chủ yếu là hàng tiêu dùng, máy móc thiết bị, khoáng sản.</div>
+          <div class="tf-item" data-key="d">d) EU đã thiết lập một thị trường chung với 4 mặt tự do lưu thông: hàng hoá, con người, dịch vụ và tiền vốn.</div>
+        </div>
+        <div class="answer-box">Đáp án: <strong>a, d đúng</strong>; b, c sai.</div>
+      </div>
+
+      <!-- DS Câu 4 -->
+      <div class="question" data-id="ds4" data-type="tf" data-correct="a,b,d" data-wrong="c">
+        <div class="q-header">
+          <span class="q-number">Câu 4</span>
+          <div class="q-text">Cho thông tin:<br>
+            <em>“Bốn quyền tự do của EU là tự do di chuyển, tự do lưu thông dịch vụ, tự do lưu thông hàng hóa và tự do lưu thông tiền vốn. Công dân EU có quyền tự do sinh sống, làm việc và được bảo đảm an toàn ở bất kì đâu trong EU.”</em>
+          </div>
+        </div>
+        <div class="tf-list">
+          <div class="tf-item" data-key="a">a) Quyền tự do đi lại, tự do cư trú, chọn nghề của mọi công dân EU được đảm bảo.</div>
+          <div class="tf-item" data-key="b">b) Tự do đối với các hoạt động vận tải du lịch.</div>
+          <div class="tf-item" data-key="c">c) Lưu thông hàng hóa giữa các nước trong EU phải đóng thuế.</div>
+          <div class="tf-item" data-key="d">d) Sản phẩm của một nước được tự do buôn bán trong thị trường chung.</div>
+        </div>
+        <div class="answer-box">Đáp án: <strong>a, b, d đúng</strong>; c sai.</div>
+      </div>
+    </div>
+
+    <!-- ========== III. TRẢ LỜI NGẮN ========== -->
+    <div class="section" data-section="3">
+      <div class="section-title">III. CÂU TRẮC NGHIỆM YÊU CẦU TRẢ LỜI NGẮN</div>
+
+      <!-- TLN Câu 1 -->
+      <div class="question" data-id="tln1" data-type="short" data-answer="106">
+        <div class="q-header">
+          <span class="q-number">Câu 1</span>
+          <div class="q-text">Tính mật độ dân số của EU năm 2021 biết số dân là 447,1 triệu người và diện tích là 4,233 triệu km²?<br>
+            <span class="note">(Làm tròn kết quả đến hàng đơn vị của người/km²)</span>
+          </div>
+        </div>
+        <div class="short-answer">
+          <input type="text" placeholder="Nhập đáp án..." data-input>
+        </div>
+        <div class="answer-box">Đáp án: <strong>106</strong></div>
+      </div>
+
+      <!-- TLN Câu 2 -->
+      <div class="question" data-id="tln2" data-type="short" data-answer="39">
+        <div class="q-header">
+          <span class="q-number">Câu 2</span>
+          <div class="q-text">Tính GDP bình quân trên người của EU năm 2021 biết số dân là 447,1 triệu người và GDP là 17,2 nghìn tỉ USD?<br>
+            <span class="note">(Làm tròn kết quả đến hàng đơn vị của nghìn USD/người)</span>
+          </div>
+        </div>
+        <div class="short-answer">
+          <input type="text" placeholder="Nhập đáp án..." data-input>
+        </div>
+        <div class="answer-box">Đáp án: <strong>39</strong></div>
+      </div>
+
+      <!-- TLN Câu 3 -->
+      <div class="question" data-id="tln3" data-type="short" data-answer="1564">
+        <div class="q-header">
+          <span class="q-number">Câu 3</span>
+          <div class="q-text">Cho bảng số liệu:<br>
+            <strong>GDP CỦA EU GIAI ĐOẠN 1957 – 2021</strong> (Đơn vị: Nghìn tỉ USD)
+            <table>
+              <tr><th>Năm</th><th>1957</th><th>1995</th><th>2007</th><th>2013</th><th>2021</th></tr>
+              <tr><td>GDP</td><td>1,1</td><td>8,3</td><td>14,7</td><td>15,3</td><td>17,2</td></tr>
+            </table>
+            Tính tốc độ tăng trưởng GDP của EU năm 2021?<br>
+            <span class="note">(Làm tròn kết quả đến hàng đơn vị của %)</span>
+          </div>
+        </div>
+        <div class="short-answer">
+          <input type="text" placeholder="Nhập đáp án..." data-input>
+        </div>
+        <div class="answer-box">Đáp án: <strong>1564</strong></div>
+      </div>
+
+      <!-- TLN Câu 4 -->
+      <div class="question" data-id="tln4" data-type="short" data-answer="18">
+        <div class="q-header">
+          <span class="q-number">Câu 4</span>
+          <div class="q-text">Cho bảng số liệu:<br>
+            <strong>GDP CỦA CÁC TRUNG TÂM KINH TẾ LỚN CỦA THẾ GIỚI NĂM 2021</strong> (Đơn vị: Tỉ USD)
+            <table>
+              <tr><th>Các trung tâm kinh tế</th><th>EU</th><th>Hoa Kỳ</th><th>Trung Quốc</th><th>Nhật Bản</th><th>Thế giới</th></tr>
+              <tr><td>GDP</td><td>17177,4</td><td>23315,1</td><td>17734,1</td><td>4940,9</td><td>96513,1</td></tr>
+            </table>
+            (Nguồn: Ngân hàng Thế giới, 2022)<br>
+            Tính tỉ trọng GDP của EU so với thế giới năm 2021?<br>
+            <span class="note">(Làm tròn kết quả đến hàng đơn vị của %)</span>
+          </div>
+        </div>
+        <div class="short-answer">
+          <input type="text" placeholder="Nhập đáp án..." data-input>
+        </div>
+        <div class="answer-box">Đáp án: <strong>18</strong></div>
+      </div>
+
+      <!-- TLN Câu 5 -->
+      <div class="question" data-id="tln5" data-type="short" data-answer="645">
+        <div class="q-header">
+          <span class="q-number">Câu 5</span>
+          <div class="q-text">Tính cán cân xuất nhập khẩu của EU năm 2021 biết giá trị xuất khẩu là 8670,6 tỉ USD, giá trị nhập khẩu là 8016,6 tỉ USD?<br>
+            <span class="note">(Làm tròn kết quả đến hàng đơn vị của tỉ USD)</span>
+          </div>
+        </div>
+        <div class="short-answer">
+          <input type="text" placeholder="Nhập đáp án..." data-input>
+        </div>
+        <div class="answer-box">Đáp án: <strong>645</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    Bài tập Liên minh châu Âu – Địa lí 11 | Có thể đảo thứ tự câu và đảo đáp án | Không thay đổi nội dung gốc
+  </footer>
+</div>
+
+<script>
+  // Lưu trữ thứ tự gốc của tất cả câu hỏi
+  let originalOrder = [];
+  let isShuffled = false;
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // Lưu thứ tự gốc
+    const questions = document.querySelectorAll('.question');
+    originalOrder = Array.from(questions).map(q => q.dataset.id);
+
+    // Cho phép click chọn đáp án MC
+    document.querySelectorAll('.options li').forEach(li => {
+      li.addEventListener('click', function() {
+        const ul = this.parentElement;
+        ul.querySelectorAll('li').forEach(item => item.classList.remove('selected'));
+        this.classList.add('selected');
+      });
+    });
+  });
+
+  // Fisher-Yates shuffle
+  function shuffleArray(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  // Đảo thứ tự các câu hỏi (giữ nguyên trong từng section)
+  function shuffleQuestions() {
+    document.querySelectorAll('.section').forEach(section => {
+      const questions = Array.from(section.querySelectorAll('.question'));
+      if (questions.length < 2) return;
+      const shuffled = shuffleArray([...questions]);
+      shuffled.forEach(q => section.appendChild(q));
+    });
+    isShuffled = true;
+    // Cập nhật lại số thứ tự hiển thị
+    renumberQuestions();
+  }
+
+  // Đảo các lựa chọn A-B-C-D trong mỗi câu MC
+  function shuffleOptions() {
+    document.querySelectorAll('.question[data-type="mc"]').forEach(q => {
+      const ul = q.querySelector('.options');
+      if (!ul) return;
+      const items = Array.from(ul.querySelectorAll('li'));
+      const shuffled = shuffleArray([...items]);
+      // Gán lại nhãn A B C D
+      const labels = ['A', 'B', 'C', 'D'];
+      shuffled.forEach((li, idx) => {
+        const text = li.textContent.replace(/^[A-D]\.\s*/, '');
+        li.textContent = labels[idx] + '. ' + text;
+        li.dataset.opt = labels[idx];
+        ul.appendChild(li);
+      });
+    });
+
+    // Đảo cả các ý a b c d trong câu đúng-sai
+    document.querySelectorAll('.question[data-type="tf"]').forEach(q => {
+      const list = q.querySelector('.tf-list');
+      if (!list) return;
+      const items = Array.from(list.querySelectorAll('.tf-item'));
+      if (items.length < 2) return;
+      const shuffled = shuffleArray([...items]);
+      const labels = ['a', 'b', 'c', 'd'];
+      shuffled.forEach((item, idx) => {
+        const text = item.textContent.replace(/^[a-d]\)\s*/, '');
+        item.textContent = labels[idx] + ') ' + text;
+        item.dataset.key = labels[idx];
+        list.appendChild(item);
+      });
+    });
+  }
+
+  // Khôi phục thứ tự gốc
+  function resetOrder() {
+    const container = document.getElementById('questionsContainer');
+    // Tạo map id -> element
+    const map = {};
+    document.querySelectorAll('.question').forEach(q => {
+      map[q.dataset.id] = q;
+    });
+    // Đưa lại theo thứ tự gốc vào đúng section
+    const sections = document.querySelectorAll('.section');
+    // Vì các câu nằm trong section, ta chỉ cần append lại theo originalOrder vào container nhưng giữ section
+    // Đơn giản hơn: xóa hết rồi append theo thứ tự gốc
+    const allQuestions = originalOrder.map(id => map[id]).filter(Boolean);
+    
+    // Group lại theo section gốc
+    // Section 1 chứa nb* th* vd*
+    // Section 2 chứa ds*
+    // Section 3 chứa tln*
+    const s1 = sections[0];
+    const s2 = sections[1];
+    const s3 = sections[2];
+    
+    // Xóa câu hỏi hiện tại (giữ title)
+    s1.querySelectorAll('.question').forEach(q => q.remove());
+    s2.querySelectorAll('.question').forEach(q => q.remove());
+    s3.querySelectorAll('.question').forEach(q => q.remove());
+
+    allQuestions.forEach(q => {
+      const id = q.dataset.id;
+      if (id.startsWith('nb') || id.startsWith('th') || id.startsWith('vd')) {
+        s1.appendChild(q);
+      } else if (id.startsWith('ds')) {
+        s2.appendChild(q);
+      } else {
+        s3.appendChild(q);
+      }
+    });
+
+    // Reset labels A B C D
+    document.querySelectorAll('.question[data-type="mc"] .options li').forEach((li, idx) => {
+      // Không làm gì, vì đã mất thứ tự gốc của options
+      // Để đơn giản, reload page hoặc giữ nguyên
+    });
+    // Vì options cũng đã bị đảo, ta cần reload để khôi phục hoàn toàn
+    location.reload();
+  }
+
+  function renumberQuestions() {
+    // Chỉ cập nhật số thứ tự trong từng nhóm nhỏ nếu cần
+    // Hiện tại giữ nguyên số câu gốc
+  }
+
+  function showAllAnswers() {
+    document.querySelectorAll('.answer-box').forEach(box => box.classList.add('show'));
+    // Highlight đúng
+    document.querySelectorAll('.question[data-type="mc"]').forEach(q => {
+      const ans = q.dataset.answer;
+      q.querySelectorAll('.options li').forEach(li => {
+        if (li.dataset.opt === ans) {
+          li.classList.add('correct-answer');
+        }
+      });
+    });
+    document.querySelectorAll('.question[data-type="tf"]').forEach(q => {
+      const correct = (q.dataset.correct || '').split(',');
+      const wrong = (q.dataset.wrong || '').split(',');
+      q.querySelectorAll('.tf-item').forEach(item => {
+        const key = item.dataset.key;
+        if (correct.includes(key)) item.classList.add('correct');
+        if (wrong.includes(key)) item.classList.add('wrong');
+      });
+    });
+  }
+
+  function hideAllAnswers() {
+    document.querySelectorAll('.answer-box').forEach(box => box.classList.remove('show'));
+    document.querySelectorAll('.options li').forEach(li => {
+      li.classList.remove('correct-answer', 'wrong-selected', 'selected');
+    });
+    document.querySelectorAll('.tf-item').forEach(item => {
+      item.classList.remove('correct', 'wrong');
+    });
+    document.getElementById('scorePanel').classList.remove('show');
+  }
+
+  function checkAnswers() {
+    let correctCount = 0;
+    let total = 0;
+
+    // MC questions
+    document.querySelectorAll('.question[data-type="mc"]').forEach(q => {
+      total++;
+      const ans = q.dataset.answer;
+      const selected = q.querySelector('.options li.selected');
+      q.querySelectorAll('.options li').forEach(li => {
+        li.classList.remove('correct-answer', 'wrong-selected');
+      });
+      if (selected) {
+        if (selected.dataset.opt === ans) {
+          selected.classList.add('correct-answer');
+          correctCount++;
+        } else {
+          selected.classList.add('wrong-selected');
+          // hiện đáp án đúng
+          q.querySelectorAll('.options li').forEach(li => {
+            if (li.dataset.opt === ans) li.classList.add('correct-answer');
+          });
+        }
+      } else {
+        // chưa chọn
+        q.querySelectorAll('.options li').forEach(li => {
+          if (li.dataset.opt === ans) li.classList.add('correct-answer');
+        });
+      }
+      q.querySelector('.answer-box').classList.add('show');
+    });
+
+    // Short answer
+    document.querySelectorAll('.question[data-type="short"]').forEach(q => {
+      total++;
+      const ans = q.dataset.answer.trim();
+      const input = q.querySelector('input');
+      const userVal = (input.value || '').trim().replace(',', '.');
+      if (userVal === ans || userVal === ans.replace('.', ',')) {
+        correctCount++;
+        input.style.borderColor = '#38a169';
+        input.style.background = '#c6f6d5';
+      } else {
+        input.style.borderColor = '#e53e3e';
+        input.style.background = '#fed7d7';
+      }
+      q.querySelector('.answer-box').classList.add('show');
+    });
+
+    // TF không tính điểm tự động (vì nhiều ý)
+    document.querySelectorAll('.question[data-type="tf"]').forEach(q => {
+      q.querySelector('.answer-box').classList.add('show');
+      const correct = (q.dataset.correct || '').split(',');
+      const wrong = (q.dataset.wrong || '').split(',');
+      q.querySelectorAll('.tf-item').forEach(item => {
+        const key = item.dataset.key;
+        if (correct.includes(key)) item.classList.add('correct');
+        if (wrong.includes(key)) item.classList.add('wrong');
+      });
+    });
+
+    document.getElementById('scoreValue').textContent = correctCount;
+    document.getElementById('totalQ').textContent = total;
+    document.getElementById('scorePanel').classList.add('show');
+  }
+</script>
+</body>
+</html>
